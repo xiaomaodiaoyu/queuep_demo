@@ -1,0 +1,26 @@
+# == Schema Information
+#
+# Table name: groups
+#
+#  id         :integer          not null, primary key
+#  name       :string(255)
+#  parent_id  :integer
+#  lft        :integer
+#  rgt        :integer
+#  depth      :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  creator_id :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  father_id: 1
+  root_id: 1
+
+two:
+  name: MyString
+  father_id: 1
+  root_id: 1
