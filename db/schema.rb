@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105112435) do
+ActiveRecord::Schema.define(:version => 20121105204823) do
 
   create_table "administrations", :force => true do |t|
     t.integer  "managinggroup_id"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(:version => 20121105112435) do
   add_index "memberships", ["group_id", "user_id"], :name => "index_memberships_on_group_id_and_user_id", :unique => true
   add_index "memberships", ["group_id"], :name => "index_memberships_on_group_id"
   add_index "memberships", ["user_id"], :name => "index_memberships_on_user_id"
+
+  create_table "replies", :force => true do |t|
+    t.integer  "user_id"
+    t.decimal  "content",    :precision => 8, :scale => 2
+    t.integer  "post_id"
+    t.float    "lat"
+    t.float    "lng"
+    t.string   "address"
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
+  end
 
   create_table "tokens", :force => true do |t|
     t.string   "access_token"

@@ -34,14 +34,5 @@ module SessionsHelper
     user.authenticate(password)
   end
 
-  def auth_user
-    @token = Token.find_by_access_token(params[:access_token])
-    if !@token.nil?
-      @user = @token.user
-    end
-  end
-
-  def auth_user?(user)
-    user == auth_user
-  end
+  
 end

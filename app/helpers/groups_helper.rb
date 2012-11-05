@@ -1,14 +1,14 @@
 module GroupsHelper
-  def is_group_admin?
-    is_group_admin_or_creator?("admin")
+  def is_admin?
+    is_admin_or_creator?("admin")
   end
 
-  def is_group_creator?
-    is_group_admin_or_creator?("creator")
+  def is_creator?
+    is_admin_or_creator?("creator")
   end
 
 private
-  def is_group_admin_or_creator?(admin_or_creator)
+  def is_admin_or_creator?(admin_or_creator)
     user_id = params[:user_id].to_i
     @group = Group.find(params[:id])
     if @group

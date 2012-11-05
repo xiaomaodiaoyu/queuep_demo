@@ -1,14 +1,15 @@
 Queuep::Application.routes.draw do
   resources :users, only: [:new, :update, :show]
   resources :groups, only: [:create]
+  resources :replies, only: [:show]
 
   match '/signup',  to: 'users#create'
   match '/logoff',  to: 'users#destroy'
   match '/login',   to: 'sessions#create'
   match '/logout',  to: 'sessions#destroy'
   match '/groups/create', to: 'groups#create'
-  match '/groups/:id/is_group_admin',          to: 'groups#is_group_admin'
-  match '/groups/:id/is_group_creator',        to: 'groups#is_group_creator'
+  match '/groups/:id/is_admin',          to: 'groups#is_admin'
+  match '/groups/:id/is_creator',        to: 'groups#is_creator'
   match '/memberships/create',     to: 'memberships#create'
   match '/administrations/create', to: 'administrations#create'
   # The priority is based upon order of creation:

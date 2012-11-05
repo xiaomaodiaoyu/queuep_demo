@@ -2,12 +2,12 @@ class GroupsController < ApplicationController
   respond_to :json
   before_filter :correct_creator, only: [:create]
 
-  def is_group_admin
-    is_group_admin?
+  def is_admin
+    is_admin?
   end
 
-  def is_group_creator
-    is_group_creator?
+  def is_creator
+    is_creator?
   end
 
   def new

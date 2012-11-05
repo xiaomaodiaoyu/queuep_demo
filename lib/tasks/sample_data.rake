@@ -2,7 +2,7 @@ namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
     make_users
-
+    make_replies
   end
 end
 
@@ -20,6 +20,23 @@ def make_users
                  last_name:  last_name,
                  email:      email,
                  password:   password)
+  end
+end
+
+def make_replies
+  100.times do |n|
+    user_id = 1 + SecureRandom.random_number(100)
+    post_id = 1 + SecureRandom.random_number(100)
+    content = 1 + SecureRandom.random_number(1000)
+    lat     = Faker::Geolocation.lat
+    lng     = Faker::Geolocation.lng
+    address = Faker::Address.city_prefix + ' ' + Faker::Address.street_address    
+    Reply.create!(user_id: user_id,
+                  post_id: post_id,
+                  content: content,
+                  lat:     lat,
+                  lng:     lng,
+                  address: address)
   end
 end
 

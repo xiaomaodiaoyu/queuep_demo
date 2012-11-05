@@ -1,0 +1,32 @@
+# == Schema Information
+#
+# Table name: replies
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  content    :decimal(8, 2)
+#  post_id    :integer
+#  lat        :float
+#  lng        :float
+#  address    :string(255)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  content: 9.99
+  post_id: 1
+  lat: 1.5
+  lng: 1.5
+  location: MyString
+
+two:
+  user_id: 1
+  content: 9.99
+  post_id: 1
+  lat: 1.5
+  lng: 1.5
+  location: MyString
