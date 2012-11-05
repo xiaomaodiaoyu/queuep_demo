@@ -5,10 +5,9 @@ gem 'rails', '3.2.8'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'pg'
+gem 'faker', '1.0.1'
 gem 'bcrypt-ruby', '3.0.1'
-gem 'awesome_nested_set'
-gem 'annotate'
+gem 'annotate', '2.5.0', group: :development
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -22,8 +21,12 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
-
+group :development do
+	gem 'sqlite3', '1.3.5'
+end
+group :production do
+  gem 'pg', '0.12.2'
+end
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

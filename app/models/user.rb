@@ -5,7 +5,6 @@
 #  id              :integer          not null, primary key
 #  email           :string(255)
 #  password_digest :string(255)
-#  remember_token  :string(255)
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  first_name      :string(255)
@@ -16,8 +15,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :first_name, :last_name
   has_secure_password
 
-  before_save { |user| user.email    = email.downcase }
-  before_save :create_remember_token
+  before_save { |user| user.email = email.downcase }
+  #before_save :create_remember_token
 
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name,  presence: true, length: { maximum: 50 }
@@ -31,6 +30,7 @@ class User < ActiveRecord::Base
   has_many :groups, through: :memberships, source: :group
   has_many :administrations, foreign_key: "admin_id", dependent: :destroy
   has_many :managinggroups, through: :administrations
+  has_one  :token, dependent: :destroy
 
   private
 

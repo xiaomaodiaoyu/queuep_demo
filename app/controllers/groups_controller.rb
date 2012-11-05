@@ -1,12 +1,20 @@
 class GroupsController < ApplicationController
   respond_to :json
+  before_filter :correct_creator, only: [:create]
+
+  def is_group_admin
+    is_group_admin?
+  end
+
+  def is_group_creator
+    is_group_creator?
+  end
 
   def new
   end
 
   def create
   	name = params[:name]
-    parent = params[:parent]
     creator_id = params[:creator_id]
 
     if request.format != :json
@@ -14,35 +22,42 @@ class GroupsController < ApplicationController
       return
     end
     
-    if !parent.nil?
-      @parent = Group.find_by_name(parent)
-      # Only admins could create subgroups
-      if @parent.admins.include?(User.find(creator_id)) 
-        @group = Group.new(name: name, creator_id: creator_id)
-        if @group.save
-          @administration = Administration.new(admin_id: creator_id, managinggroup_id: @group.id)
-          @group.move_to_child_of(@parent)
-          respond_with(@group)
-        else
-          logger.info("Failed to create the group.")
-          render status: 400, json: {errors: @group.errors.full_messages}
-        end
-      else
-        logger.info("Failed to create the group.")
-        render status: 400, json: {messages: "Only admins could create subgroups."}
-      end
+    if name.nil?
+      render_error(404, request.path, 20100, "Group name is null.")
+    elsif creator_id.nil?
+      render_error(404, request.path, 20100, "creator_id is null.")      
+    elsif !auth_user?(@creator)
+      render_error(404, request.path, 20100, "Current user is not the creator.")
     else
       @group = Group.new(name: name, creator_id: creator_id)
       if @group.save
-        @administration = Administration.new(admin_id: creator_id, managinggroup_id: @group.id)
-        @membership = Membership.new(user_id: creator_id, group_id: @group.id)
-        if @administration.save && @membership.save
-          respond_with(@group)
+        respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
+      elsif @group.errors[:name].any?
+        if @group.errors[:name].include?("is too long (maximum is 50 characters)")
+          render_error(404, request.path, 20100, "Group name is too long. (max: 50)")
+        elsif @group.errors[:name].include?("has already been taken")
+          render_error(404, request.path, 20100, "Group name is in use.")
+        else
+          render_error(404, request.path, 20100, "Invalid group name.")
         end
       else
-        logger.info("Failed to create the group.")
-        render status: 400, json: {errors: @group.errors.full_messages}
+        render_error(404, request.path, 20100, "Failed to create the new group.")
       end
     end
-  end 
+  end
+
+private
+  def correct_creator
+    @creator = User.find(params[:creator_id])
+    if @creator
+      if !auth_user?(@creator)
+        render_error(404, request.path, 20100, "Current user is not the creator.")
+        return
+      end
+    else
+      render_error(404, request.path, 20100, "creator_id does not exist.")
+      return
+    end     
+  end  
+
 end

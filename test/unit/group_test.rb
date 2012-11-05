@@ -4,13 +4,10 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string(255)
-#  parent_id  :integer
-#  lft        :integer
-#  rgt        :integer
-#  depth      :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  creator_id :integer
+#  admin_id   :integer
 #
 
 require 'test_helper'

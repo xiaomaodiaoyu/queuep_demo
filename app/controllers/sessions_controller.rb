@@ -6,32 +6,35 @@ class SessionsController < ApplicationController
     password = params[:password]
     
     if request.format != :json
-      render status: 406, json: {errors: "The request must be json."}
+      render_error(406, request.path, 20000, "The request must be json.")
       return
     end
 
     if email.nil? or password.nil?
-      render status: 400, json: {errors: "Both email and password required."}
+      render_error(400, request.path, 20004, "Both email and password required.")
       return
     end
 
     @user = User.find_by_email(email.downcase)
-    if @user && @user.authenticate(password)
-      respond_with(@user)
+    if @user
+      if @user.authenticate(password)
+        log_in(@user)
+      else
+        render_error(401, request.path, 20004, "Wrong combination of email and password.")
+      end
     else
-      logger.info("User #{email} failed signin, user cannot be found.")
-      render status: 401, json: {errors: "Incorrect email/password"}
+      render_error(401, request.path, 20006, "User does not exist.")
     end
   end
 
   def destroy
-    @user = User.find_by_remember_token(params[:remember_token])
-    if @user.nil?
-      logger.info("Token not found.")
-      render status: 404, json: {message: "Token not found."}
-    else
-      #@user.reset_authentication_token!
-      render status: 200, json: {token: params[:id]}
-    end
+    log_out
   end
+
+  private
+
+    def generate_token
+      access_token = SecureRandom.urlsafe_base64(24)
+    end
+
 end
