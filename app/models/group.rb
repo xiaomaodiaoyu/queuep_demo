@@ -27,7 +27,9 @@ class Group < ActiveRecord::Base
 
 private
   def set_initial_admin
-    self.admin_id = self.creator_id
+    if !self.admin_id
+      self.admin_id = self.creator_id
+    end
   end
 
 end

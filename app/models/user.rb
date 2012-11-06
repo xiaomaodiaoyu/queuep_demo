@@ -28,9 +28,11 @@ class User < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships, source: :group
+  has_one  :token, dependent: :destroy
+
   has_many :administrations, foreign_key: "admin_id", dependent: :destroy
   has_many :managinggroups, through: :administrations
-  has_one  :token, dependent: :destroy
+  
 
   private
 

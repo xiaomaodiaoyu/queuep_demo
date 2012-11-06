@@ -7,6 +7,6 @@ class ApplicationController < ActionController::Base
 
   protected
     def record_not_found_errors
-      render_error(404, request.path, 00001, "Record not found") 
+      render_error(404, request.path, 404, "Record not found") 
     end
 end

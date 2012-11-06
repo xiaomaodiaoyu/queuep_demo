@@ -1,16 +1,29 @@
 Queuep::Application.routes.draw do
   resources :users, only: [:new, :update, :show]
-  resources :groups, only: [:create]
   resources :replies, only: [:show]
+  #resources :groups
 
-  match '/signup',  to: 'users#create'
-  match '/logoff',  to: 'users#destroy'
-  match '/login',   to: 'sessions#create'
-  match '/logout',  to: 'sessions#destroy'
-  match '/groups/create', to: 'groups#create'
-  match '/groups/:id/is_admin',          to: 'groups#is_admin'
-  match '/groups/:id/is_creator',        to: 'groups#is_creator'
-  match '/memberships/create',     to: 'memberships#create'
+  match '/signup',     to: 'users#create'
+  match '/logoff',     to: 'users#destroy'
+  match '/users/show', to: 'users#show'
+
+  match '/login',      to: 'sessions#create'
+  match '/logout',     to: 'sessions#destroy'
+
+  match '/groups/create',            to: 'groups#create'
+  match '/groups/show',              to: 'groups#show'
+  match '/groups/count',             to: 'groups#count'
+  match '/groups/delete',            to: 'groups#destroy'
+  match '/groups/is_admin',          to: 'groups#is_admin'
+  match '/groups/is_creator',        to: 'groups#is_creator'
+  match '/groups/is_member',         to: 'groups#is_member'
+  match '/groups/transfer_admin',    to: 'groups#transfer_admin'
+  match '/groups/update',            to: 'groups#update'
+  match '/groups/join',              to: 'memberships#create'
+  match '/groups/leave',             to: 'memberships#destroy'
+  
+  
+
   match '/administrations/create', to: 'administrations#create'
   # The priority is based upon order of creation:
   # first created -> highest priority.

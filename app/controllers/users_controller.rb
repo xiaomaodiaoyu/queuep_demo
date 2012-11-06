@@ -1,17 +1,13 @@
 class UsersController < ApplicationController
   respond_to :json
-  #before_filter :auth_user,    only: [:show]
-  before_filter :correct_user, only: [:show, :update]
 
   def new
   end
 
   def show
-    @user = User.find(params[:id])
-    if @user
+    if correct_user
+      @user = User.find(params[:user_id])
       respond_with(@user, only: [:id, :email, :first_name, :last_name])
-    else
-      render_error(404, request.path, 20000, "Invalid user")
     end
   end
 
@@ -61,12 +57,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
 =begin
-    # change password
+    # only change password
     # needs to be improved
-=end
-    if !@user.nil?
+=end    
+    if correct_user
+      @user = User.find(params[:user_id])
       if @user.update_attributes(params[:user])
         respond_with(@user, only: [:id, :email])
       elsif @user.errors[:password].include?("is too short (minimum is 6 characters)")
@@ -74,24 +70,27 @@ class UsersController < ApplicationController
       else
         render_error(404, request.path, 20006, "Failed to update the profile.")
       end
-    else
-      render_error(404, request.path, 20006, "Invalid user.")
     end
   end
 
-private
 
-    def correct_user
-      @user = User.find(params[:id])
-      if @user
-        if !auth_user?(@user)
-          render_error(404, request.path, 20006, "No rights.")
-          return
+private
+  def correct_user
+    @user = User.find(params[:user_id])
+    if @user
+      if current_user 
+        if current_user?(@user)
+          return true
+        else
+          render_error(404, request.path, 20006, 
+                       "Could only check and update your own profile.")
+          return false
         end
-      else
-        render_error(404, request.path, 20006, "User does not exist.")
-        return
-      end  
+      end
+    else
+      render_error(404, request.path, 20006, "User does not exist.")
+      return false
     end
+  end
 
 end
