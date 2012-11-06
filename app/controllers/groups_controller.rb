@@ -16,7 +16,7 @@ class GroupsController < ApplicationController
     @creator = User.find(creator_id)
 
     if @creator && current_user
-      if !current_user(@creator)
+      if !current_user?(@creator)
         render_error(404, request.path, 20100, "Current user is not the creator.")
       else 
         @group = Group.new(name: name, creator_id: creator_id)
