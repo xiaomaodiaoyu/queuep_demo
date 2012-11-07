@@ -20922,3 +20922,42 @@ Processing by MembershipsController#destroy as JSON
   [1m[36mCACHE (0.0ms)[0m  [1mSELECT "groups".* FROM "groups" WHERE "groups"."id" = ? LIMIT 1[0m  [["id", "4"]]
   [1m[35mCACHE (0.0ms)[0m  SELECT 1 AS one FROM "users" INNER JOIN "memberships" ON "users"."id" = "memberships"."user_id" WHERE "memberships"."group_id" = 4 AND "users"."id" = 1 LIMIT 1
 Completed 404 Not Found in 13ms (Views: 0.3ms | ActiveRecord: 0.7ms)
+Connecting to database specified by database.yml
+Connecting to database specified by database.yml
+  [1m[36m (0.2ms)[0m  [1mSELECT "schema_migrations"."version" FROM "schema_migrations" [0m
+Migrating to CreateUsers (20121020062111)
+Migrating to AddIndexToUsersEmailAndRememberToken (20121020062258)
+Migrating to AddFirstNameAndLastNameToUsers (20121020123824)
+Migrating to CreateGroups (20121020131605)
+Migrating to AddIndexToGroupsName (20121020132452)
+Migrating to CreateMemberships (20121020135109)
+Migrating to CreateAdministrations (20121020143058)
+Migrating to AddCreatorIdToGroups (20121020161123)
+Migrating to RemoveRememberTokenFromUsers (20121101112209)
+Migrating to CreateTokens (20121101112610)
+Migrating to AddIndexToTokensUserId (20121101113155)
+Migrating to AddIndexToTokensAccessToken (20121101130138)
+Migrating to RemoveParentIdFromGroups (20121105105508)
+Migrating to AddAdminIdToGroups (20121105112435)
+Migrating to CreateReplies (20121105204823)
+Migrating to DropAdministrations (20121106213902)
+  [1m[35m (0.1ms)[0m  select sqlite_version(*)
+  [1m[36m (0.1ms)[0m  [1mbegin transaction[0m
+  [1m[35m (1.4ms)[0m  DROP TABLE "administrations"
+  [1m[36m (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ('20121106213902')[0m
+  [1m[35m (13.5ms)[0m  commit transaction
+  [1m[36m (0.7ms)[0m  [1mselect sqlite_version(*)[0m
+  [1m[35m (0.2ms)[0m  SELECT "schema_migrations"."version" FROM "schema_migrations" 
+  [1m[36m (0.9ms)[0m  [1mPRAGMA index_list("groups")[0m
+  [1m[35m (0.5ms)[0m  PRAGMA index_info('index_groups_on_name')
+  [1m[36m (0.1ms)[0m  [1mPRAGMA index_list("memberships")[0m
+  [1m[35m (0.1ms)[0m  PRAGMA index_info('index_memberships_on_user_id')
+  [1m[36m (0.1ms)[0m  [1mPRAGMA index_info('index_memberships_on_group_id')[0m
+  [1m[35m (0.1ms)[0m  PRAGMA index_info('index_memberships_on_group_id_and_user_id')
+  [1m[36m (0.1ms)[0m  [1mPRAGMA index_list("replies")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_list("tokens")
+  [1m[36m (0.0ms)[0m  [1mPRAGMA index_info('index_tokens_on_user_id')[0m
+  [1m[35m (0.1ms)[0m  PRAGMA index_info('index_tokens_on_access_token')
+  [1m[36m (0.1ms)[0m  [1mPRAGMA index_list("users")[0m
+  [1m[35m (0.0ms)[0m  PRAGMA index_info('index_users_on_email')
+Connecting to database specified by database.yml

@@ -11,18 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121105204823) do
-
-  create_table "administrations", :force => true do |t|
-    t.integer  "managinggroup_id"
-    t.integer  "admin_id"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
-  end
-
-  add_index "administrations", ["admin_id", "managinggroup_id"], :name => "index_administrations_on_admin_id_and_managinggroup_id", :unique => true
-  add_index "administrations", ["admin_id"], :name => "index_administrations_on_admin_id"
-  add_index "administrations", ["managinggroup_id"], :name => "index_administrations_on_managinggroup_id"
+ActiveRecord::Schema.define(:version => 20121106213902) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
