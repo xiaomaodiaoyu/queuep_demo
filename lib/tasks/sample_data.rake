@@ -3,6 +3,9 @@ namespace :db do
   task populate: :environment do
     make_users
     make_replies
+    make_groups
+    make_posts
+    make_tokens
   end
 end
 
@@ -23,6 +26,34 @@ def make_users
   end
 end
 
+def make_groups
+  users = User.all(limit: 10)
+  2.times do
+    users.each do |user|
+      name = Faker::Lorem.words(3)
+      group = Group.create!(name: name, creator_id: user.id, admin_id: user.id)
+      Membership.create!(user_id: user.id, group_id: group.id)
+      Membership.create!(user_id: user.id + SecureRandom.random_number(20), group_id: group.id)
+      Membership.create!(user_id: user.id + SecureRandom.random_number(50), group_id: group.id)
+    end
+  end
+end
+
+def make_posts
+  users = User.all(limit: 10)
+  50.times do
+    group_id = 1 + SecureRandom.random_number(20)
+    content = Faker::Lorem.sentence
+    users.each { |user| user.posts.create!(group_id: group_id,
+                                           content: content) }
+  end
+end
+
+def make_tokens
+  users = User.all(limit: 10)
+  users.each { |user| Token.create!(user_id: user.id) }
+end
+
 def make_replies
   100.times do |n|
     user_id = 1 + SecureRandom.random_number(100)
@@ -40,13 +71,7 @@ def make_replies
   end
 end
 
-def make_microposts
-  users = User.all(limit: 6)
-  50.times do
-    content = Faker::Lorem.sentence(5)
-    users.each { |user| user.microposts.create!(content: content) }
-  end
-end
+
 
 def make_relationships
   users = User.all

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106213902) do
+ActiveRecord::Schema.define(:version => 20121108025416) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
@@ -26,13 +26,22 @@ ActiveRecord::Schema.define(:version => 20121106213902) do
   create_table "memberships", :force => true do |t|
     t.integer  "group_id"
     t.integer  "user_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "auth",       :default => false
   end
 
   add_index "memberships", ["group_id", "user_id"], :name => "index_memberships_on_group_id_and_user_id", :unique => true
   add_index "memberships", ["group_id"], :name => "index_memberships_on_group_id"
   add_index "memberships", ["user_id"], :name => "index_memberships_on_user_id"
+
+  create_table "posts", :force => true do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "replies", :force => true do |t|
     t.integer  "user_id"

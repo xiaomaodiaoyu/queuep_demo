@@ -21,9 +21,11 @@ class Group < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :users,       through: :memberships
+  has_many :posts,       dependent: :destroy
 
-  has_many :administrations, foreign_key: "managinggroup_id", dependent: :destroy
-  has_many :admins, through: :administrations
+
+#  has_many :administrations, foreign_key: "managinggroup_id", dependent: :destroy
+#  has_many :admins, through: :administrations
 
 private
   def set_initial_admin

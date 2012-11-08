@@ -17,56 +17,20 @@ module ApplicationHelper
     end
   end
 
-  def auth_user?(user)
-    user == auth_user
-  end
-
-  def current_user
-    current_user = auth_user
-  end
-
-  def current_user?(user)
-    if current_user && current_user == user
-      return true
-    else
-      return false
-    end
-  end
-
-  def current_user_is_admin
-    @group = Group.find(params[:group_id])
-    if @group
-      if current_user 
-        if current_user?(User.find(@group.admin_id))
+  def current_user_is_admin?(group)
+    if group
+      @current_user = auth_user
+      if @current_user
+        if is_admin?(group, @current_user.id)
           return true
         else
-          render_error(404, request.path, 20006, 
-                       "Current user is not the group's admin.")
+          render_error(401, request.path, 20100, 
+                       "Current user is not admin.")
           return false
         end
       end
-    else
-      render_error(404, request.path, 20006, "Group does not exist.")
-      return false
-    end
+    end  
   end
 
-  def current_user_is_member
-    @group = Group.find(params[:group_id])
-    if @group
-      if current_user 
-        if @group.users.include?(current_user)
-          return true
-        else
-          render_error(404, request.path, 20006, 
-                       "Current user is not the group's member.")
-          return false
-        end
-      end
-    else
-      render_error(404, request.path, 20006, "Group does not exist.")
-      return false
-    end
-  end
 
 end

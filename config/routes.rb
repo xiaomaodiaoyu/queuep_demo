@@ -1,11 +1,10 @@
 Queuep::Application.routes.draw do
-  resources :users, only: [:new, :update, :show]
   resources :replies, only: [:show]
-  #resources :groups
 
-  match '/signup',     to: 'users#create'
-  match '/logoff',     to: 'users#destroy'
-  match '/users/show', to: 'users#show'
+  match '/signup',       to: 'users#create'
+  match '/logoff',       to: 'users#destroy'
+  match '/users/show',   to: 'users#show'
+  match '/users/update', to: 'users#update'
 
   match '/login',      to: 'sessions#create'
   match '/logout',     to: 'sessions#destroy'
@@ -21,10 +20,16 @@ Queuep::Application.routes.draw do
   match '/groups/update',            to: 'groups#update'
   match '/groups/join',              to: 'memberships#create'
   match '/groups/leave',             to: 'memberships#destroy'
-  
-  
+  match '/groups/authorize_member',  to: 'memberships#authorize_member'
+  match '/groups/unauthorize_member',to: 'memberships#unauthorize_member'
 
-  match '/administrations/create', to: 'administrations#create'
+  match '/posts/create',             to: 'posts#create'
+  match '/posts/delete',             to: 'posts#destroy'
+  match '/posts/edit',               to: 'posts#update'
+  match '/posts/is_author',          to: 'posts#is_author'
+  match '/posts/user_posts',         to: 'posts#user_posts'
+  match '/posts/group_posts',        to: 'posts#group_posts'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

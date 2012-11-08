@@ -16,11 +16,10 @@ class User < ActiveRecord::Base
   has_secure_password
 
   before_save { |user| user.email = email.downcase }
-  #before_save :create_remember_token
 
   validates :first_name, presence: true, length: { maximum: 50 }
   validates :last_name,  presence: true, length: { maximum: 50 }
-  validates :password,   length: { minimum: 6 }
+  validates :password,   length: { minimum: 6 }, :if => :validate_password?
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email,      presence: true, format: { with: VALID_EMAIL_REGEX },
@@ -28,15 +27,12 @@ class User < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships, source: :group
+  has_many :posts, dependent: :destroy
   has_one  :token, dependent: :destroy
 
-  has_many :administrations, foreign_key: "admin_id", dependent: :destroy
-  has_many :managinggroups, through: :administrations
-  
+private
+  def validate_password?
+    self.password
+  end
 
-  private
-
-    def create_remember_token
-      self.remember_token = SecureRandom.urlsafe_base64
-    end
 end
