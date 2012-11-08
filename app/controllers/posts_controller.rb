@@ -68,7 +68,7 @@ class PostsController < ApplicationController
       if !@posts.empty?
         group_id = params[:group_id]
         @posts_in_group = @posts.where(group_id: group_id)
-        if @posts_in_group
+        if !@posts_in_group.empty?
           render json: {result: 1,
                         count:  @posts_in_group.count,
                         posts:  @posts_in_group} and return
