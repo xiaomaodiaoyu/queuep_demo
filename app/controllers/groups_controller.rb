@@ -10,15 +10,11 @@ class GroupsController < ApplicationController
     if current_user
       @group = Group.new(name: name, creator_id: current_user.id)
       if @group.save
-        @membership = Membership.new(user_id: current_user.id, group_id: @group.id)
-          if @membership.save
-            respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
-          else
-            render_error(404, request.path, 20109, @membership.errors.as_json)
-          end
-      else
-        render_error(404, request.path, 20101, @group.errors.as_json)
+        current_user.creator_join!(@group)
+        respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
       end
+    else
+      render_error(404, request.path, 20101, @group.errors.as_json)
     end
   end
 
@@ -42,9 +38,9 @@ class GroupsController < ApplicationController
   def is_admin
     group_id = params[:group_id]
     user_id  = params[:user_id].to_i
-    group = Group.find(group_id)
-    if group
-      if is_admin?(group, user_id)
+    @group = Group.find(group_id)
+    if @group
+      if is_admin?(user_id, @group)
         render json: {result: 1}
       else
         render json: {result: 0}
@@ -57,9 +53,9 @@ class GroupsController < ApplicationController
   def is_creator
     group_id = params[:group_id]
     user_id  = params[:user_id].to_i
-    group = Group.find(group_id)
-    if group
-      if is_creator?(group, user_id)
+    @group = Group.find(group_id)
+    if @group
+      if is_creator?(user_id, @group)
         render json: {result: 1}
       else
         render json: {result: 0}
@@ -70,15 +66,13 @@ class GroupsController < ApplicationController
 # params: access_token, group_id, user_id
 # auth user's right
   def is_member
+    @user = User.find(params[:user_id])
     @group = Group.find(params[:group_id])
-    if @group
-      @user = User.find(params[:user_id])
-      if @user
-        if is_member?(@group, @user)
-          render json: {result: 1}
-        else
-          render json: {result: 0}
-        end
+    if user_and_group_exist?(@user, @group)
+      if is_member?(@user, @group)
+        render json: {result: 1}
+      else
+        render json: {result: 0}
       end
     end
   end
@@ -95,18 +89,9 @@ class GroupsController < ApplicationController
 # params: access_token, group_id
 # member's right
   def show
-    @current_user = auth_user
-    if @current_user
-      @group = Group.find(params[:group_id])
-      if @group
-        if is_member?(@group, @current_user)
-          respond_with(@group, only: [:id, :name, :admin_id,
-                                      :creator_id])
-        else
-          render_error(401, request.path, 20100, 
-                       "Current user is not group member.")
-        end
-      end
+    @group = Group.find(params[:group_id])
+    if current_user_is_member?(@group)
+      respond_with(@group, only: [:id, :name, :admin_id, :creator_id])
     end
   end
 
@@ -116,11 +101,9 @@ class GroupsController < ApplicationController
     @group = Group.find(params[:group_id])
     if current_user_is_admin?(@group)
       if @group.update_attributes(params[:group])
-        respond_with(@group, only: [:id, :name, 
-                             :creator_id, :admin_id])
+        respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
       else
-        render_error(404, request.path, 20108, 
-                         "Failed to update group info")
+        render_error(404, request.path, 20108, "Failed to update group info")
       end
     end
   end
@@ -137,6 +120,7 @@ class GroupsController < ApplicationController
       end
     end
   end
+
 
 # params: access_token, group_id, new_admin_id
 # admin's right 
@@ -162,5 +146,14 @@ class GroupsController < ApplicationController
       end
     end
   end
+
+=begin
+  def tranfer_admin
+    @group = Group.find(params[:group_id])
+    if current_user_is_admin?(@group)
+      if 
+    end
+  end
+=end
 
 end

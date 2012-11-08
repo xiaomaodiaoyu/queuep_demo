@@ -8,10 +8,11 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  auth       :boolean          default(FALSE)
+#  admin      :boolean          default(FALSE)
 #
 
 class Membership < ActiveRecord::Base
-  attr_accessible :group_id, :user_id
+  attr_accessible :group_id
 
   belongs_to :group
   belongs_to :user
@@ -19,4 +20,5 @@ class Membership < ActiveRecord::Base
   validates :group_id, presence: true
   validates :user_id,  presence: true
   validates_uniqueness_of :user_id, scope: [:group_id]
+  validates_uniqueness_of :admin,   scope: [:group_id]
 end

@@ -27,8 +27,21 @@ class User < ActiveRecord::Base
 
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships, source: :group
+  has_many :managing_groups, through: :memberships, 
+           source: :group, conditions: ["memberships.admin = ?", true]
   has_many :posts, dependent: :destroy
   has_one  :token, dependent: :destroy
+
+  def creator_join!(group)
+    @membership = self.join!(group)
+    @membership.toggle!(:auth)
+    @membership.toggle!(:admin)
+  end
+
+  def join!(group)
+    memberships.create!(group_id: group.id)
+  end 
+
 
 private
   def validate_password?

@@ -8,6 +8,7 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  auth       :boolean          default(FALSE)
+#  admin      :boolean          default(FALSE)
 #
 
 require 'test_helper'
