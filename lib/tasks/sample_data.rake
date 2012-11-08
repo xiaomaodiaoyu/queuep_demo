@@ -33,9 +33,9 @@ def make_groups
       name = Faker::Lorem.words(3)
       group = Group.create!(name: name, creator_id: user.id, admin_id: user.id)
       Membership.create!(user_id: user.id, group_id: group.id)
-      user_id = user.id + SecureRandom.random_number(20)
+      user_id = user.id + 30
       Membership.create!(user_id: user_id, group_id: group.id)
-      another_user_id = user_id + SecureRandom.random_number(30)
+      another_user_id = user_id + 30
       Membership.create!(user_id: another_user_id, group_id: group.id)
     end
   end
