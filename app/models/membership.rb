@@ -12,13 +12,15 @@
 #
 
 class Membership < ActiveRecord::Base
-  attr_accessible :group_id
-
   belongs_to :group
   belongs_to :user
 
   validates :group_id, presence: true
-  validates :user_id,  presence: true
-  validates_uniqueness_of :user_id, scope: [:group_id]
-  validates_uniqueness_of :admin,   scope: [:group_id]
+  validates :user_id,  presence: true, uniqueness: { scope: :group_id}
+  validates_uniqueness_of :admin, scope: :group_id, :if => :admin_is_true
+
+  private
+    def admin_is_true
+      self.admin == true
+    end
 end

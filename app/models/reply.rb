@@ -14,7 +14,7 @@
 #
 
 class Reply < ActiveRecord::Base
-  attr_accessible :content, :lat, :lng, :address, :post_id, :user_id
+  attr_accessible :content, :lat, :lng, :address
   validates :user_id,  presence: true
   validates :post_id,  presence: true
   validates :content,  presence: true, numericality: true

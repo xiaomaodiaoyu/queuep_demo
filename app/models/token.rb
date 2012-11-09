@@ -10,7 +10,6 @@
 #
 
 class Token < ActiveRecord::Base
-  attr_accessible   :access_token, :user_id
   before_validation :generate_access_token
   belongs_to        :user
 

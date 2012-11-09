@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :groups, through: :memberships, source: :group
   has_many :managing_groups, through: :memberships, 
-           source: :group, conditions: ["memberships.admin = ?", true]
+            source: :group, conditions: ["memberships.admin = ?", true]
   has_many :posts, dependent: :destroy
   has_one  :token, dependent: :destroy
 
@@ -39,9 +39,38 @@ class User < ActiveRecord::Base
   end
 
   def join!(group)
-    memberships.create!(group_id: group.id)
-  end 
+    @membership = self.memberships.new
+    @membership.group_id = group.id
+    @membership.save
+    return @membership
+  end
 
+  def leave!(group)
+    @membership = self.memberships.find_by_group_id(group.id)
+    if @membership
+      @membership.destroy
+    end
+  end
+
+  def is_admin?(group)
+    id == group.admin_id
+  end
+
+  def is_creator?(group)
+    id == group.creator_id
+  end
+
+  def is_member?(group)
+    group.users.include?(self)
+  end
+
+  def is_author?(post)
+    id == post.user_id
+  end
+
+  def find_posts(group)
+    posts = self.posts.where(group_id: group.id)
+  end
 
 private
   def validate_password?

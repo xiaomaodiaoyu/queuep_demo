@@ -27,8 +27,10 @@ Queuep::Application.routes.draw do
   match '/posts/delete',             to: 'posts#destroy'
   match '/posts/edit',               to: 'posts#update'
   match '/posts/is_author',          to: 'posts#is_author'
-  match '/posts/user_posts',         to: 'posts#user_posts'
+  match '/posts/user_posts_in_one_group',to: 'posts#user_posts_in_one_group'
   match '/posts/group_posts',        to: 'posts#group_posts'
+  match '/posts/all_my_posts',       to: 'posts#all_my_posts'
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
