@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121108164635) do
+ActiveRecord::Schema.define(:version => 20121109034807) do
 
   create_table "groups", :force => true do |t|
     t.string   "name"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20121108164635) do
     t.integer  "post_id"
     t.float    "lat"
     t.float    "lng"
-    t.string   "address"
+    t.string   "location"
     t.datetime "created_at",                               :null => false
     t.datetime "updated_at",                               :null => false
   end

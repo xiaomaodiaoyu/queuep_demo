@@ -1,6 +1,4 @@
 Queuep::Application.routes.draw do
-  resources :replies, only: [:show]
-
   match '/signup',       to: 'users#create'
   match '/logoff',       to: 'users#destroy'
   match '/users/show',   to: 'users#show'
@@ -31,6 +29,10 @@ Queuep::Application.routes.draw do
   match '/posts/group_posts',        to: 'posts#group_posts'
   match '/posts/all_my_posts',       to: 'posts#all_my_posts'
 
+  match '/replies/create',           to: 'replies#create'
+  match '/replies/delete',           to: 'replies#destroy'
+  match '/replies/edit',             to: 'replies#update'
+  match '/replies/post_replies',     to: 'replies#post_replies'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

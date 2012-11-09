@@ -15,6 +15,7 @@ class Post < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :group
+  has_many :replies, dependent: :destroy
 
   validates :user_id, presence: true
   validates :group_id, presence: true

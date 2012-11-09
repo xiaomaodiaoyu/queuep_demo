@@ -58,13 +58,23 @@ module ApplicationHelper
   end
 
   def authorized_member
-    @membership = @current_user.memberships.find_by_group_id(@group.id)
-    if @membership.auth?
+    if @current_user.is_authorized_member?(@group)
       return true
     else
       render_error(404, request.path, 20006, "Not authorized.")
       return false
-    end  
+    end
+  end
+
+  def render_results(results)
+    if !results.empty?
+
+      render json: {success: 1,
+                    count: results.count,
+                    results: results}
+    else
+      render json: {success: 0}
+    end
   end
 
 end

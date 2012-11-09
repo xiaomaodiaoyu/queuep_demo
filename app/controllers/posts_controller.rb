@@ -59,21 +59,21 @@ class PostsController < ApplicationController
 # self's right
   def all_my_posts
     @posts = @current_user.posts
-    render_posts(@posts)
+    render_results(@posts)
   end
 
 # params: access_token, user_id, group_id
 # member's right
   def user_posts_in_one_group
     @posts = @referred_user.find_posts(@group)
-    render_posts(@posts)
+    render_results(@posts)
   end
 
 # params: access_token, group_id
 # member's right
   def group_posts
     @posts = @group.posts
-    render_posts(@posts)
+    render_results(@posts)
   end  
 
 
@@ -88,14 +88,6 @@ private
     end
   end
 
-  def render_posts(posts)
-    if !posts.empty?
-      render json: {result: 1,
-                    count: posts.count,
-                    posts: posts}
-    else
-      render json: {result: 0}
-    end
-  end
+
 
 end

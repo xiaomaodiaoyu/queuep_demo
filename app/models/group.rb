@@ -22,6 +22,8 @@ class Group < ActiveRecord::Base
   has_many :memberships, dependent: :destroy
   has_many :users,       through: :memberships
   has_many :posts,       dependent: :destroy
+  has_many :authorized_users, through: :memberships, 
+            source: :user, conditions: ["memberships.auth = ?", true]
 
 private
   def set_initial_admin

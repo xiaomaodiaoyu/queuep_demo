@@ -8,17 +8,20 @@
 #  post_id    :integer
 #  lat        :float
 #  lng        :float
-#  address    :string(255)
+#  location   :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
 
 class Reply < ActiveRecord::Base
-  attr_accessible :content, :lat, :lng, :address
+  attr_accessible :content, :lat, :lng, :location
   validates :user_id,  presence: true
   validates :post_id,  presence: true
   validates :content,  presence: true, numericality: true
   validates :lat,      presence: true, numericality: true
   validates :lng,      presence: true, numericality: true
-  validates :address,  presence: true
+  validates :location,  presence: true
+
+  belongs_to :user
+  belongs_to :post
 end

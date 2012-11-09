@@ -30,6 +30,7 @@ class User < ActiveRecord::Base
   has_many :managing_groups, through: :memberships, 
             source: :group, conditions: ["memberships.admin = ?", true]
   has_many :posts, dependent: :destroy
+  has_many :replies, dependent: :destroy
   has_one  :token, dependent: :destroy
 
   def creator_join!(group)
@@ -66,6 +67,10 @@ class User < ActiveRecord::Base
 
   def is_author?(post)
     id == post.user_id
+  end
+
+  def is_authorized_member?(group)
+    group.authorized_users.include?(self)
   end
 
   def find_posts(group)
