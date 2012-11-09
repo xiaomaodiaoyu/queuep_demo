@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121109034807) do
+ActiveRecord::Schema.define(:version => 20121109194315) do
+
+  create_table "circles", :force => true do |t|
+    t.integer  "group_id"
+    t.string   "name"
+    t.integer  "creator_id"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.integer  "last_update_admin_id"
+  end
 
   create_table "groups", :force => true do |t|
     t.string   "name"

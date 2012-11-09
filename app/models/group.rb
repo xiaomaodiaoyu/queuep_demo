@@ -24,6 +24,7 @@ class Group < ActiveRecord::Base
   has_many :posts,       dependent: :destroy
   has_many :authorized_users, through: :memberships, 
             source: :user, conditions: ["memberships.auth = ?", true]
+  has_many :circles,     dependent: :destroy
 
 private
   def set_initial_admin

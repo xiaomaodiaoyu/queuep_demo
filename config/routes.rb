@@ -34,6 +34,10 @@ Queuep::Application.routes.draw do
   match '/replies/edit',             to: 'replies#update'
   match '/replies/post_replies',     to: 'replies#post_replies'
 
+  match '/circles/create',           to: 'circles#create'
+  match '/circles/delete',           to: 'circles#destroy'
+  match '/circles/update',           to: 'circles#update'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
