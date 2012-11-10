@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
   respond_to :json
   before_filter :signed_up_user, only: [:create]
-  before_filter :auth_user, only: [:destroy]
+  before_filter :auth_user,      only: [:destroy]
 
 # params: email, password 
   def create

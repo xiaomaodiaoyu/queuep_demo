@@ -13,7 +13,8 @@ class MembershipsController < ApplicationController
       render_error(404, request.path, 20100, "User is already a member.")
     else
       if @user.join!(@group)
-        render json: { group_id:   @group.id,
+        render json: { result:     1,
+                       group_id:   @group.id,
                        group_name: @group.name,
                        user_count: @group.users.count }
       else

@@ -21,4 +21,6 @@ class Circle < ActiveRecord::Base
   validates :last_update_admin_id,   presence: true
 
   belongs_to :group
+  has_many   :circlings, dependent: :destroy
+  has_many   :users,     through: :circlings
 end

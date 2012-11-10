@@ -26,9 +26,11 @@ class User < ActiveRecord::Base
                          uniqueness: { case_sensitive: false }
 
   has_many :memberships, dependent: :destroy
-  has_many :groups, through: :memberships, source: :group
-  has_many :managing_groups, through: :memberships, 
+  has_many :groups, through: :memberships
+  has_many :managing_groups, through: :memberships,
             source: :group, conditions: ["memberships.admin = ?", true]
+  has_many :circlings,   dependent: :destroy
+  has_many :circles,     through: :circlings
   has_many :posts, dependent: :destroy
   has_many :replies, dependent: :destroy
   has_one  :token, dependent: :destroy
@@ -50,6 +52,20 @@ class User < ActiveRecord::Base
     @membership = self.memberships.find_by_group_id(group.id)
     if @membership
       @membership.destroy
+    end
+  end
+
+  def add_to_circle!(circle)
+    @circling = self.circlings.new
+    @circling.circle_id = circle.id
+    @circling.save
+    return @circling
+  end
+
+  def remove_from_circle!(circle)
+    @circling = self.circlings.find_by_circle_id(circle.id)
+    if @circling
+      @circling.destroy
     end
   end
 

@@ -37,6 +37,11 @@ Queuep::Application.routes.draw do
   match '/circles/create',           to: 'circles#create'
   match '/circles/delete',           to: 'circles#destroy'
   match '/circles/update',           to: 'circles#update'
+  match '/circles/add_member',       to: 'circlings#create'
+  match '/circles/remove_member',    to: 'circlings#destroy'
+
+  # testing
+  match '/replies/show',             to: 'replies#show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

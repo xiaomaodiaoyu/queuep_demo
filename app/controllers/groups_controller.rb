@@ -20,6 +20,32 @@ class GroupsController < ApplicationController
     end
   end
 
+# params: access_token, group_id
+# member's right
+  def show
+    respond_with(@group, only: [:id, :name, :admin_id, :creator_id])
+  end
+
+# params: access_token, group_id, group[variable]
+# admin's right
+  def update
+    if @group.update_attributes(params[:group])
+      respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
+    else
+      render_error(404, request.path, 20103, "Failed to update group info")
+    end
+  end
+
+# params: access_token, group_id
+# admin's right
+  def destroy
+    if @group.destroy
+      render json: {result: 1}
+    else
+      render json: {result: 0}
+    end
+  end
+
 # params: access_token, group_id, user_id
 # auth user's right
   def is_admin
@@ -31,7 +57,6 @@ class GroupsController < ApplicationController
       render json: {result: 0}
     end
   end
-
 
 # params: access_token, group_id, user_id
 # auth user's right
@@ -61,33 +86,8 @@ class GroupsController < ApplicationController
 # auth user's right
   def count
     @group = Group.find(params[:group_id])   
-    render json: {count: @group.users.count}
-  end
-
-# params: access_token, group_id
-# member's right
-  def show
-    respond_with(@group, only: [:id, :name, :admin_id, :creator_id])
-  end
-
-# params: access_token, group_id
-# admin's right
-  def update
-    if @group.update_attributes(params[:group])
-      respond_with(@group, only: [:id, :name, :creator_id, :admin_id])
-    else
-      render_error(404, request.path, 20108, "Failed to update group info")
-    end
-  end
-
-# params: access_token, group_id
-# admin's right
-  def destroy
-    if @group.destroy
-      render json: {result: 1}
-    else
-      render json: {result: 0}
-    end
+    render json: {group_id: @group.id,
+                  user_count: @group.users.count}
   end
 
 # params: access_token, group_id, user_id

@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: circlings
+#
+#  id         :integer          not null, primary key
+#  circle_id  :integer
+#  user_id    :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  circle_id: 1
+  user_id: 1
+
+two:
+  circle_id: 1
+  user_id: 1

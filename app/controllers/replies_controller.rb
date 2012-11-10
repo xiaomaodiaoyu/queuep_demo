@@ -1,10 +1,11 @@
 class RepliesController < ApplicationController
   respond_to :json
-  before_filter :auth_user
+  before_filter :auth_user, except: [:show]
   before_filter :post_group_member, only: [:create, :post_replies]
   before_filter :correct_receiver,  only: [:create]
   before_filter :correct_viewer,    only: [:post_replies]
   before_filter :reply_author, only: [:destroy, :update]
+  after_filter  :clear_all_data
 
 # params: access_token, post_id, content, location, lat, lng
 # correct_receiver's right
@@ -20,7 +21,17 @@ class RepliesController < ApplicationController
     if @reply.save
       respond_with(@reply, only: [:id, :content, :location, :lat, :lng, :created_at])
     else
-      render_error(404, request.path, 20201, @reply.errors.as_json)
+      render_error(404, request.path, 20301, @reply.errors.as_json)
+    end
+  end
+
+# params: access_token, reply_id, reply[variable]
+# author's right
+  def update
+    if @reply.update_attributes(params[:reply])
+      respond_with @reply
+    else
+      render_error(401, request.path, 20302, "Failed to edit reply.")
     end
   end
 
@@ -34,16 +45,6 @@ class RepliesController < ApplicationController
     end
   end
 
-# params: access_token, reply_id, reply[variable]
-# author's right
-  def update
-    if @reply.update_attributes(params[:reply])
-      respond_with @reply
-    else
-      render_error(401, request.path, 20203, "Failed to edit reply.")
-    end
-  end
-
 # params: access_token, post_id
 # authorized member's right
   def post_replies
@@ -51,7 +52,7 @@ class RepliesController < ApplicationController
     render_results(@replies)
   end
   
-=begin
+# testing
   def show
     @reply = Reply.find(params[:id])
     if @reply
@@ -60,7 +61,6 @@ class RepliesController < ApplicationController
       render_error(404, request.path, 30000, "Invalid reply")
     end
   end
-=end
 
 private
   def correct_receiver
@@ -68,7 +68,7 @@ private
     if @receivers.include?(@current_user)
       return true
     else
-      render_error(404, request.path, 30000, "Invalid receiver")
+      render_error(404, request.path, 20300, "Invalid receiver")
       return false
     end
   end
@@ -79,7 +79,7 @@ private
     if @current_user.is_member?(@group)
       return true
     else
-      render_error(404, request.path, 30000, "Current user is not in the post's group.")
+      render_error(404, request.path, 20300, "Current user is not in the post's group.")
       return false
     end
   end
@@ -89,7 +89,7 @@ private
     if @current_user.is_author?(@reply)
       return true
     else
-      render_error(404, request.path, 30000, "Not the reply's author.")
+      render_error(404, request.path, 20300, "Not the reply's author.")
       return false
     end
   end
@@ -99,7 +99,7 @@ private
     if @viewers.include?(@current_user)
       return true
     else
-      render_error(404, request.path, 30000, "Invalid viewer")
+      render_error(404, request.path, 20300, "Invalid viewer")
       return false
     end
   end

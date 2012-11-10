@@ -68,12 +68,22 @@ module ApplicationHelper
 
   def render_results(results)
     if !results.empty?
-
-      render json: {success: 1,
+      render json: {result: 1,
                     count: results.count,
-                    results: results}
+                    details: results}
     else
-      render json: {success: 0}
+      render json: {result: 0}
+    end
+  end
+
+  def circle_group_admin
+    @circle = Circle.find(params[:circle_id])
+    @group = @circle.group
+    if @current_user.is_admin?(@group)
+      return true
+    else
+      render_error(404, request.path, 30000, "Current user is not admin of the circle's group")
+      return false
     end
   end
 

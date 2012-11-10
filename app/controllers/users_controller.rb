@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   respond_to :json
-  before_filter :auth_user, except: [:create]
+  before_filter :auth_user,                     except: [:create]
   before_filter :current_user_is_referred_user, except: [:create]
   after_filter  :clear_all_data
 
@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     end
   end
 
-# params: access_token, group_id, user_id
+# params: access_token, user_id
 # self's right
   def show
     respond_with(@user, only: [:id, :email, :first_name, :last_name])
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
     if @user.update_attributes(params[:user])
       respond_with(@user, only: [:id, :email, :first_name, :last_name])
     else
-      render_error(404, request.path, 20004, "Failed to update profile")
+      render_error(404, request.path, 20005, "Failed to update profile")
     end
   end  
 
@@ -53,7 +53,7 @@ private
     if current_user?(user)
       @user = user
     else
-      render_error(404, request.path, 20004, "Self's right.")
+      render_error(404, request.path, 20000, "Self's right.")
       return false
     end
   end

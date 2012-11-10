@@ -14,7 +14,17 @@ class PostsController < ApplicationController
     if @post.save
       respond_with(@post, only: [:content, :user_id, :group_id, :created_at])
     else
-      render_error(404, request.path, 20101, @post.errors.full_messages)
+      render_error(404, request.path, 20201, @post.errors.full_messages)
+    end
+  end
+
+# params: access_token, post_id, post[variable]
+# author's right 
+  def update
+    if @post.update_attributes(params[:post])
+      respond_with @post
+    else
+      render_error(401, request.path, 20203, "Failed to edit post.")
     end
   end
 
@@ -25,16 +35,6 @@ class PostsController < ApplicationController
     	render json: {result: 1}
     else
      	render json: {result: 0}
-    end
-  end
-
-# params: access_token, post_id, post[variable]
-# author's right 
-  def update
-    if @post.update_attributes(params[:post])
-    	respond_with @post
-    else
-     	render_error(401, request.path, 20203, "Failed to edit post.")
     end
   end
 
@@ -55,13 +55,6 @@ class PostsController < ApplicationController
     end 
   end
 
-# params: access_token, group_id
-# self's right
-  def all_my_posts
-    @posts = @current_user.posts
-    render_results(@posts)
-  end
-
 # params: access_token, user_id, group_id
 # member's right
   def user_posts_in_one_group
@@ -74,9 +67,15 @@ class PostsController < ApplicationController
   def group_posts
     @posts = @group.posts
     render_results(@posts)
-  end  
+  end
 
-
+# params: access_token, group_id
+# self's right
+  def all_my_posts
+    @posts = @current_user.posts
+    render_results(@posts)
+  end
+  
 private
   def post_author
     post = Post.find(params[:post_id])
